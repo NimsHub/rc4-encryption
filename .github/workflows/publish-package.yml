@@ -7,7 +7,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
+    env:
+      CR_PAT: ${{secrets.CR_PAT}}
     steps:
       - uses: actions/checkout@v3
 
@@ -22,6 +23,6 @@ jobs:
         run: mvn -B package --file pom.xml
       - name: Build and Push the image
         run: |
-          docker login --username nimshub --password ${{secrets.CR_PAT}}
+          echo $CR_PAT | docker login ghcr.io --username NimsHub --password-stdin
           docker build -t ghcr.io/nimshub/rc4-encryption .
           docker push ghcr.io/nimshub/rc4-encryption:latest
